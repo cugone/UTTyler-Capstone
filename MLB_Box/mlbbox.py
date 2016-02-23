@@ -1,91 +1,86 @@
 from urllib.request import urlopen
 from urllib.error import *
 import json
-import xml
+import xml.etree.ElementTree as ET
 import datetime
+import dateutil
 
-def dict2xml(d, root_node=None):
-    wrap          =     False if None == root_node or isinstance(d, list) else True
-    root          = 'objects' if None == root_node else root_node
-    root_singular = root[:-1] if 's' == root[-1] and None == root_node else root
-    xml           = ''
-    children      = []
+def getdatestring(year, month, day):
+    y = ''
+    for i in range(4 - len(y)):
+        y += '0'
+    #end if
+    y = y + str(year)
+    m = ('0' + str(month) if month < 10 else str(month))
+    d = ('0' + str(day) if day < 10 else str(day))
+    return str(year) + str(m) + str(d)
+#end getdatestring
+
+def decrementday(d):
+    if type(d) != datetime.date:
+        raise TypeError("decrementday expects a date object.")
+    #end if
+    #d = d - datetime.timedelta(days=1)
+    d = d - dateutil.relativedelta(days=-1)
+#end decrementday
+
+def end_of_last_season_date(d):
+    if type(d) != datetime.date:
+        raise TypeError("end_of_last_season_date expects a date object.")
+    #end if
     
-    if isinstance(d, dict):
-        for key, value in dict.items(d):
-            if isinstance(value, dict):
-                children.append(dict2xml(value, key))
-            elif isinstance(value, list):
-                children.append(dict2xml(value, key))
-            else:
-                xml = xml + ' ' + key + '="' + str(value) + '"'
-            #end if
-        #end for
-    else:
-        for value in d:
-            children.append(dict2xml(value, root_singular))
-        #end for
+    today = datetime.date.today()
+    new_date = d
+    season_start = datetime.date(d.year, 4, 4)
+    season_end = datetime.date(d.year, 10, 4)
+    if d < season_start:
+        new_date = dateutil.relativedelta(season_end, datetime(today.year, 10, 4))
+    elif d > season_end:
+        new_date = season_end
     #end if
-    end_tag = '>' if 0 < len(children) else '/>'
-    
-    if wrap or isinstance(d, dict):
-        xml = '<' + root + xml + end_tag
-    #end if
-    if 0 < len(children):
-        for child in children:
-            xml = xml + child
-        #end for
-        if wrap or isinstance(d, dict):
-            xml = xml + '</' + root + '>'
-        #end if
-    #end if
-    return xml
-#end dict2xml
+    return new_date
+#end end_of_last_season_date
 
 #Get current date.
-now = datetime.datetime.now()
-#year = now.year
-#month = now.month
-#day = now.day
+now = datetime.date.today()
+year = now.year
+month = now.month
+day = now.day
 
-year = 2015
-month = 10
-day = 4
+print("Now: " + str(now) + " Last Season: " + str(end_of_last_season_date(now)))
 
 #Convert to MLB GameDay2-acceptable URL
 str_year = 'year_' + str(year) + '/'
 str_month = 'month_' + ('0' + str(month) if month < 10 else str(month)) + '/'
 str_day = 'day_' + ('0' + str(day) if day < 10 else str(day)) + '/'
+str_date = str_year + str_month + str_day
 base_url = "http://gd2.mlb.com/components/game/mlb/"
-midseason_url = base_url + str_year + str_month + str_day + "scoreboard_windows.xml"
-postseason_url = base_url + str_year + "postseason_scoreboard.json"
+midseason_url = base_url + str_date + "scoreboard_windows.xml"
 
 #Grab data from server.
 url = None
 html = None
 my_file = None
 json_dict = None
+
 try:
-    url = postseason_url
+    url = midseason_url
     html = urlopen(url).read().decode()
-    json_dict = json.loads(html)
-    html = dict2xml(json_dict)
+    xml_tree = ET.fromstring(html)
+    root = xml_tree.getroot()
+    has_children = False
+    for child in root:
+        if has_children == False:
+            break
+        #end if
+    #end for
 except URLError as e:
+    print("No data available. Check back later.")
     url = None
 #end try
 
-if url == None:
-    try:
-        url = midseason_url
-        html = urlopen(url).read().decode()
-    except URLError as e:
-        print("No data available. Check back later.")
-        url = None
-    #end try
-#end if
-
 if url != None:
-    my_file = open("daily_mlb_standings.dat", "w")
+    my_file = open(str(year) + str(month) + str(day) + "_mlb_standings.dat", "w")
     print(html, file = my_file)
     my_file.close()
 #end if
