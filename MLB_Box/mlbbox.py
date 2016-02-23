@@ -52,25 +52,39 @@ def get_index_from_name(name):
 #end get_index_from_name
 
 d = datetime.date.today()
+d = datetime.date(2015, 4, 12)
 midseason_url = date_to_mlb_url(get_recent_season_date(d))
-
-#Grab data from server.
-url = None
-html = None
-my_file = None
 
 class Team:
     def __init__(self, city, name, wins, losses):
         self.city = city
         self.name = name
-        self.wins = wins
-        self.losses = losses
+        self.wins = int(wins)
+        self.losses = int(losses)
     #end __init__
     
     def __repr__(self):
         return str(self.city) + ' ' + str(self.name) + ": (" + str(self.wins) + ", " + str(self.losses) + ")"
     #end __reper__
+    
+    def __lt__(self, other):
+        if self.wins == other.wins:
+            if self.losses == other.losses:
+                if self.city == other.city:
+                    return self.city < other.city
+                #end if
+            #end if
+            return self.losses < other.losses
+        #end if
+        return self.wins > other.wins
+    #end __lt__
+
 #end Team
+
+#Grab data from server.
+url = None
+html = None
+my_file = None
 
 try:
     url = midseason_url
@@ -98,8 +112,8 @@ try:
         #Get name/wins/losses for each AL-Central team
         if home_divison == 'C':
             name = child.attrib['home_team_name']
-            wins = child.attrib['home_win']
-            losses = child.attrib['home_loss']
+            wins = int(child.attrib['home_win'])
+            losses = int(child.attrib['home_loss'])
             i = get_index_from_name(name)
             if i != -1:
                 teams[i].wins = wins
@@ -109,8 +123,8 @@ try:
 
         if away_divison == 'C':
             name = child.attrib['away_team_name']
-            wins = child.attrib['away_win']
-            losses = child.attrib['away_loss']
+            wins = int(child.attrib['away_win'])
+            losses = int(child.attrib['away_loss'])
             i = get_index_from_name(name)
             if i != -1:
                 teams[i].wins = wins
@@ -119,11 +133,8 @@ try:
         #end if
     #end for
     
-    #Sort by ascending losses then descending wins, then city
-    sorted_teams = sorted(teams, key=attrgetter('losses'))
-    sorted(sorted_teams, key=attrgetter('wins'), reverse=True)
-    sorted(teams, key=attrgetter('city'))
-    
+    #Sort by descending wins, then ascending losses, then city
+    sorted_teams = sorted(teams)
     
     out_file = open("results.dat", "w")
     out_file.write(str(sorted_teams))
