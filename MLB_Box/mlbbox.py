@@ -27,7 +27,8 @@ def date_to_mlb_url(d):
 #end date_to_mlb_url
 
 class Team:
-    def __init__(self, city, name, wins, losses):
+    def __init__(self, played_today, city, name, wins, losses):
+        self.played_today = played_today
         self.city = city
         self.name = name
         self.wins = int(wins)
