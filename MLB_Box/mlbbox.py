@@ -107,13 +107,6 @@ def parse_gameday_data(d, teams_cache):
 d = datetime.date.today()
 url = date_to_mlb_url(d)
 
-cache_file = None
-try:
-cache_file = open("cache.dat", "r")
-
-cache_file.write(d)
-cache_file.close()
-
 #Grab data from server.
 cur_url = None
 html = None
