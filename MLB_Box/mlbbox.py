@@ -43,9 +43,7 @@ class Team:
     def __lt__(self, other):
         if self.wins == other.wins:
             if self.losses == other.losses:
-                if self.city == other.city:
-                    return self.city < other.city
-                #end if
+                return self.city < other.city
             #end if
             return self.losses < other.losses
         #end if
