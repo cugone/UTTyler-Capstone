@@ -1,36 +1,15 @@
-from urllib.request import urlopen
-from urllib.error import *
-import json
-import xml.etree.ElementTree as ET
 import datetime
+import json
+import os
+import xml.etree.ElementTree as ET
 from dateutil.relativedelta import *
 from dateutil.easter import *
 from dateutil.rrule import *
 from dateutil.parser import *
 from operator import itemgetter, attrgetter
+from urllib.request import urlopen
+from urllib.error import *
 
-def get_recent_season_date(d):
-    """Returns a date corresponding to the most recent season. If the date argument is within the current season, does nothing.
-"""
-    if type(d) != datetime.date:
-        raise TypeError("get_recent_season_date expects a date object.")
-    #end if
-    
-    season_start = datetime.date(d.year, 4, 5)
-    season_end = datetime.date(d.year, 10, 4)
-
-    if d >= season_start and d <= season_end:
-        return d
-    #end if
-
-    new_date = None
-    if d < season_start:
-        new_date = d + relativedelta(datetime.date(d.year - 1, 10, 4), d)
-    elif d > season_end:
-        new_date = season_end
-    #end if
-    return new_date
-#end get_recent_season_date
 
 def date_to_mlb_url(d):
 
@@ -46,10 +25,6 @@ def date_to_mlb_url(d):
     base_url = "http://gd2.mlb.com/components/game/mlb/"
     return base_url + str_date + "scoreboard_windows.xml"
 #end date_to_mlb_url
-
-def get_index_from_name(name):
-    return 0 if name == "White Sox" else (1 if name == "Indians" else (2 if name == "Tigers" else (3 if name == "Royals" else (4 if name == "Twins" else -1))))
-#end get_index_from_name
 
 class Team:
     def __init__(self, city, name, wins, losses):
@@ -131,7 +106,7 @@ def parse_gameday_data(d, teams_cache, teams_played):
 
 
 d = datetime.date.today()
-url = date_to_mlb_url(get_recent_season_date(d))
+url = date_to_mlb_url(d)
 
 cache_file = None
 try:
