@@ -103,7 +103,6 @@ def parse_gameday_data(d, teams_cache):
 
 
 d = datetime.date.today()
-d = datetime.date(2015, 4, 6)
 url = date_to_mlb_url(d)
 
 #Grab data from server.
