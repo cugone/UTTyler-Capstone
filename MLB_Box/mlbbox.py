@@ -108,9 +108,6 @@ d = datetime.date.today()
 url = date_to_mlb_url(d)
 
 #Grab data from server.
-cur_url = None
-html = None
-my_file = None
 teams_cache = {"White Sox": Team(False, "Chicago", "White Sox", 0, 0), \
                "Indians": Team(False, "Cleveland", "Indians", 0, 0), \
                "Tigers": Team(False, "Detroit", "Tigers", 0, 0), \
