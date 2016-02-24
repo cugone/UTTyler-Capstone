@@ -53,7 +53,7 @@ class Team:
 #end Team
 
 
-def parse_gameday_data(d, teams_cache, teams_played):
+def parse_gameday_data(d, teams_cache):
 
     cur_url = date_to_mlb_url(d)
     html = urlopen(url).read().decode()
@@ -84,9 +84,9 @@ def parse_gameday_data(d, teams_cache, teams_played):
             losses = int(child.attrib['home_loss'])
             #Team played today
             teams_played = True
-            teams_cache[name][0] = True
-            teams_cache[name][1] = wins
-            teams_cache[name][2] = losses
+            teams_cache[name].played_today = True
+            teams_cache[name].wins = wins
+            teams_cache[name].losses = losses
         #end if
 
         if away_divison == 'C':
@@ -95,9 +95,9 @@ def parse_gameday_data(d, teams_cache, teams_played):
             losses = int(child.attrib['away_loss'])
             #Team played today
             teams_played = True
-            teams_cache[name][0] = True
-            teams_cache[name][1] = wins
-            teams_cache[name][2] = losses
+            teams_cache[name].played_today = True
+            teams_cache[name].wins = wins
+            teams_cache[name].losses = losses
         #end if
     #end for
 
@@ -125,8 +125,8 @@ teams_cache = {"White Sox": Team(False, "Chicago", "White Sox", 0, 0), \
                "Twins": Team(False, "Minnesota", "Twins", 0, 0)}
 
 try:
-    while all(teams_played) == False:
-        parse_gameday_data(d, teams_cache, teams_played)
+    while all([x.played_today for x in teams_cache.values()]) == False:
+        parse_gameday_data(d, teams_cache)
         d -= relativedelta(days=-1)
     #end while
 
