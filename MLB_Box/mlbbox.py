@@ -56,7 +56,7 @@ class Team:
 def parse_gameday_data(d, teams_cache):
 
     cur_url = date_to_mlb_url(d)
-    html = urlopen(url).read().decode()
+    html = urlopen(cur_url).read().decode()
     xml_tree = ET.fromstring(html)
     
     for child in xml_tree:
@@ -102,9 +102,6 @@ def parse_gameday_data(d, teams_cache):
 #end parse_gameday_data
 
 
-d = datetime.date.today()
-url = date_to_mlb_url(d)
-
 #Grab data from server.
 teams_cache = {"White Sox": Team(False, "Chicago", "White Sox", 0, 0), \
                "Indians": Team(False, "Cleveland", "Indians", 0, 0), \
@@ -113,6 +110,7 @@ teams_cache = {"White Sox": Team(False, "Chicago", "White Sox", 0, 0), \
                "Twins": Team(False, "Minnesota", "Twins", 0, 0)}
 
 try:
+    d = datetime.date.today()
     while all([x.played_today for x in teams_cache.values()]) == False:
         parse_gameday_data(d, teams_cache)
         d += relativedelta(days=-1)
