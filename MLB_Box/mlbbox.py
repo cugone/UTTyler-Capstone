@@ -122,7 +122,7 @@ try:
     sorted_teams = sorted([_ for _ in teams_cache.values()])
     
     out_file = open("results.dat", "w")
-    out_file.write(d)
+    out_file.write(str(d) + '\n')
     out_file.write(str(sorted_teams))
     out_file.close()
 except URLError as e:
