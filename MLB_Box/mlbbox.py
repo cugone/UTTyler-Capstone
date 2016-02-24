@@ -118,14 +118,11 @@ cache_file.close()
 cur_url = None
 html = None
 my_file = None
-teams_cache = {"White Sox": [False, 0, 0], \
-         "Indians": [False, 0, 0], \
-         "Tigers": [False, 0, 0], \
-         "Royals": [False, 0, 0], \
-         "Twins": [False, 0, 0]}
-
-teams_played = [False, False, False, False, False]
-
+teams_cache = {"White Sox": Team(False, "Chicago", "White Sox", 0, 0), \
+               "Indians": Team(False, "Cleveland", "Indians", 0, 0), \
+               "Tigers": Team(False, "Detroit", "Tigers", 0, 0), \
+               "Royals": Team(False, "Kansas City", "Royals", 0, 0), \
+               "Twins": Team(False, "Minnesota", "Twins", 0, 0)}
 
 try:
     while all(teams_played) == False:
