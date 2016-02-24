@@ -120,7 +120,7 @@ teams_cache = {"White Sox": Team(False, "Chicago", "White Sox", 0, 0), \
 try:
     while all([x.played_today for x in teams_cache.values()]) == False:
         parse_gameday_data(d, teams_cache)
-        d -= relativedelta(days=-1)
+        d += relativedelta(days=-1)
     #end while
 
     #sort teams by less than equivalence
