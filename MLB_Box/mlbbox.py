@@ -51,10 +51,6 @@ def get_index_from_name(name):
     return 0 if name == "White Sox" else (1 if name == "Indians" else (2 if name == "Tigers" else (3 if name == "Royals" else (4 if name == "Twins" else -1))))
 #end get_index_from_name
 
-d = datetime.date.today()
-d = datetime.date(2015, 4, 12)
-midseason_url = date_to_mlb_url(get_recent_season_date(d))
-
 class Team:
     def __init__(self, city, name, wins, losses):
         self.city = city
@@ -66,7 +62,8 @@ class Team:
     def __repr__(self):
         return str(self.city) + ' ' + str(self.name) + ": (" + str(self.wins) + ", " + str(self.losses) + ")"
     #end __reper__
-    
+
+    #Sort by descending wins, then ascending losses, then city    
     def __lt__(self, other):
         if self.wins == other.wins:
             if self.losses == other.losses:
@@ -81,16 +78,13 @@ class Team:
 
 #end Team
 
-#Grab data from server.
-url = None
-html = None
-my_file = None
 
-try:
-    url = midseason_url
+def parse_gameday_data(d, teams_cache, teams_played):
+
+    cur_url = date_to_mlb_url(d)
     html = urlopen(url).read().decode()
     xml_tree = ET.fromstring(html)
-    teams = [Team("Chicago", "White Sox", 0, 0), Team("Cleveland", "Indians", 0, 0), Team("Detroit", "Tigers", 0, 0), Team("Kansas City", "Royals", 0, 0), Team("Minnesota", "Twins", 0, 0)]
+    
     for child in xml_tree:
         if child.tag != "game":
             continue
@@ -114,29 +108,62 @@ try:
             name = child.attrib['home_team_name']
             wins = int(child.attrib['home_win'])
             losses = int(child.attrib['home_loss'])
-            i = get_index_from_name(name)
-            if i != -1:
-                teams[i].wins = wins
-                teams[i].losses = losses
-            #end if
+            #Team played today
+            teams_played = True
+            teams_cache[name][0] = True
+            teams_cache[name][1] = wins
+            teams_cache[name][2] = losses
         #end if
 
         if away_divison == 'C':
             name = child.attrib['away_team_name']
             wins = int(child.attrib['away_win'])
             losses = int(child.attrib['away_loss'])
-            i = get_index_from_name(name)
-            if i != -1:
-                teams[i].wins = wins
-                teams[i].losses = losses
-            #end if
+            #Team played today
+            teams_played = True
+            teams_cache[name][0] = True
+            teams_cache[name][1] = wins
+            teams_cache[name][2] = losses
         #end if
     #end for
-    
-    #Sort by descending wins, then ascending losses, then city
+
+#end parse_gameday_data
+
+
+d = datetime.date.today()
+url = date_to_mlb_url(get_recent_season_date(d))
+
+cache_file = None
+try:
+cache_file = open("cache.dat", "r")
+
+cache_file.write(d)
+cache_file.close()
+
+#Grab data from server.
+cur_url = None
+html = None
+my_file = None
+teams_cache = {"White Sox": [False, 0, 0], \
+         "Indians": [False, 0, 0], \
+         "Tigers": [False, 0, 0], \
+         "Royals": [False, 0, 0], \
+         "Twins": [False, 0, 0]}
+
+teams_played = [False, False, False, False, False]
+
+
+try:
+    while all(teams_played) == False:
+        parse_gameday_data(d, teams_cache, teams_played)
+        d -= relativedelta(days=-1)
+    #end while
+
+    #sort teams by less than equivalence
     sorted_teams = sorted(teams)
     
     out_file = open("results.dat", "w")
+    out_file.write(d)
     out_file.write(str(sorted_teams))
     out_file.close()
 except URLError as e:
