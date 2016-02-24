@@ -120,7 +120,7 @@ try:
     #end while
 
     #sort teams by less than equivalence
-    sorted_teams = sorted(teams)
+    sorted_teams = sorted([_ for _ in teams_cache.values()])
     
     out_file = open("results.dat", "w")
     out_file.write(d)
