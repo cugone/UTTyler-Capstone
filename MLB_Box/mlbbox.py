@@ -82,8 +82,7 @@ def parse_gameday_data(d, teams_cache):
             name = child.attrib['home_team_name']
             wins = int(child.attrib['home_win'])
             losses = int(child.attrib['home_loss'])
-            #Team played today
-            teams_played = True
+
             teams_cache[name].played_today = True
             teams_cache[name].wins = wins
             teams_cache[name].losses = losses
@@ -93,8 +92,7 @@ def parse_gameday_data(d, teams_cache):
             name = child.attrib['away_team_name']
             wins = int(child.attrib['away_win'])
             losses = int(child.attrib['away_loss'])
-            #Team played today
-            teams_played = True
+
             teams_cache[name].played_today = True
             teams_cache[name].wins = wins
             teams_cache[name].losses = losses
@@ -105,6 +103,7 @@ def parse_gameday_data(d, teams_cache):
 
 
 d = datetime.date.today()
+d = datetime.date(2015, 4, 6)
 url = date_to_mlb_url(d)
 
 #Grab data from server.
