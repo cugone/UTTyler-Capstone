@@ -10,7 +10,7 @@ from operator import itemgetter, attrgetter
 from urllib.request import urlopen
 from urllib.error import *
 
-import Team
+from Team import Team
 
 ##
 # <summary>Date to mlb URL.</summary>
@@ -67,9 +67,9 @@ def parse_gameday2_data(date, teams_cache):
             wins = int(child.attrib['home_win'])
             losses = int(child.attrib['home_loss'])
 
-            teams_cache[name].played_today = True
-            teams_cache[name].wins = wins
-            teams_cache[name].losses = losses
+            teams_cache[name].set_played_today()
+            teams_cache[name].wins(wins)
+            teams_cache[name].losses(losses)
         #end if
 
         if away_divison == 'C':
@@ -77,9 +77,9 @@ def parse_gameday2_data(date, teams_cache):
             wins = int(child.attrib['away_win'])
             losses = int(child.attrib['away_loss'])
 
-            teams_cache[name].played_today = True
-            teams_cache[name].wins = wins
-            teams_cache[name].losses = losses
+            teams_cache[name].set_played_today()
+            teams_cache[name].wins(wins)
+            teams_cache[name].losses(losses)
         #end if
     #end for
 
@@ -96,9 +96,9 @@ teams_cache = {"White Sox": Team(False, "Chicago", "White Sox", 0, 0), \
 try:
     d = datetime.date.today()
     parse_gameday2_data(d, teams_cache)
-    while all([x.played_today for x in teams_cache.values()]) == False:
+    while all([x.played_today() for x in teams_cache.values()]) == False:
         d += relativedelta(days=-1)
-        parse_gameday_data(d, teams_cache)
+        parse_gameday2_data(d, teams_cache)
     #end while
 
     #sort teams by less than equivalence

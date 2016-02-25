@@ -38,5 +38,53 @@ class Team:
         #end if
         return self._wins > other._wins
     #end __lt__
+    
+    def city(self, city = None):
+        if city == None:
+            return self._city
+        else:
+            self._city = city
+        #end if
+    #end city
+
+    def name(self, name = None):
+        if name == None:
+            return self._name
+        else:
+            self._name = name
+        #end if
+    #end name
+    
+    def wins(self, wins = None):
+        if wins == None:
+            return self._wins
+        else:
+            self._wins = wins
+        #end if
+    #end wins
+        
+    def losses(self, losses = None):
+        if losses == None:
+            return self._losses
+        else:
+            self._losses = losses
+        #end if
+    #end wins
+
+    def played_today(self, played = None):
+        if played == None:
+            return self._played_today
+        else:
+            self._played_today = played
+        #end if
+    #end played_today
+    
+    def set_played_today(self):
+        self.played_today(True)
+    #end set_played_today
+
+    def clear_played_today(self):
+        self.played_today(False)
+    #end clear_played_today
 
 #end Team
