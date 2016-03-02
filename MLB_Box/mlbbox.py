@@ -60,9 +60,10 @@ def parse_gameday2_data(date, teams_cache):
         if home_divison != 'C' and away_divison != 'C':
             continue
         #end if
-
+        
         #Get name/wins/losses for each AL-Central team
-        if league_value[1] == 'A' and home_divison == 'C':
+        home_league = league_value[1]
+        if home_league == 'A' and home_divison == 'C':
             name = child.attrib['home_team_name']
             wins = int(child.attrib['home_win'])
             losses = int(child.attrib['home_loss'])
@@ -76,8 +77,9 @@ def parse_gameday2_data(date, teams_cache):
                 teams_cache[name].losses(losses)
             #end if
         #end if
-
-        if league_value[0] == 'A' and away_divison == 'C':
+        
+        away_league = league_value[0]
+        if away_league == 'A' and away_divison == 'C':
             name = child.attrib['away_team_name']
             wins = int(child.attrib['away_win'])
             losses = int(child.attrib['away_loss'])
