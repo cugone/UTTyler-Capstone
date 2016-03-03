@@ -94,6 +94,13 @@ def parse_gameday2_data(date, teams_cache):
 
 #end parse_gameday2_data
 
+##
+# <summary>Raises the physical flags based on standings position.</summary>
+# <remarks>Casey Ugone, 3/3/2016.</remarks>
+# <param name="cache">The teams cache.</param>
+def raiseflags(cache):
+    pass
+#end raiseflags
 
 #Grab data from server.
 teams_cache = {"White Sox": Team(False, "Chicago", "White Sox", 0, 0), \
