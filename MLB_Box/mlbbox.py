@@ -95,6 +95,23 @@ def parse_gameday2_data(date, teams_cache):
 #end parse_gameday2_data
 
 ##
+# <summary>Determines if the current day is mid-season.</summary>
+# <remarks>Casey Ugone, 3/5/2016.</remarks>
+# <param name="teams_cache">The cache of teams.</param>
+# <param name="day_count">  Number of days travelled.</param>
+# <returns>A value.</returns>
+def is_midseason(teams_cache, day_count):
+    #midseason if any team has played and less than a week has gone by.
+    is_midseason = day_count < 7 and any([x.played_today() for x in teams_cache.values()])
+
+    #between seasons if no team has played after a few days.
+    is_between_seasons = day_count < 3 and all([x.played_today() for x in teams_cache.values()]) == False
+    
+    #if it's midseason or between seasons, but not both.
+    return (is_midseason and not is_between_seasons) or (not is_midseason and is_between_seasons)
+#end is_midseason
+
+##
 # <summary>Raises the physical flags based on standings position.</summary>
 # <remarks>Casey Ugone, 3/3/2016.</remarks>
 # <param name="cache">The teams cache.</param>
@@ -114,22 +131,14 @@ try:
     day_count = 0
     print(d)
     parse_gameday2_data(d, teams_cache)
-    #midseason if any team has played and less than a week has gone by.
-    is_midseason = day_count < 7 and any([x.played_today() for x in teams_cache.values()])
-    #between seasons if no team has played after a few days.
-    is_between_seasons = day_count < 3 and all([x.played_today() for x in teams_cache.values()]) == False
-    #leave the loop if it's midseason or between seasons, but not both.
-    logical_xor = (is_midseason and not is_between_seasons) or (not is_midseason and is_between_seasons)
-    while logical_xor:
+    while is_midseason(teams_cache, day_count):
+
         d += relativedelta(days=-1)
         day_count += 1
         print(d)
         
         parse_gameday2_data(d, teams_cache)
 
-        is_midseason = day_count < 7 and any([x.played_today() for x in teams_cache.values()])
-        is_between_seasons = day_count < 3 and all([x.played_today() for x in teams_cache.values()]) == False
-        logical_xor = (is_midseason and not is_between_seasons) or (not is_midseason and is_between_seasons)
     #end while
 
     #sort teams by less than equivalence
