@@ -111,12 +111,25 @@ teams_cache = {"White Sox": Team(False, "Chicago", "White Sox", 0, 0), \
 
 try:
     d = datetime.date.today()
+    day_count = 0
     print(d)
     parse_gameday2_data(d, teams_cache)
-    while all([x.played_today() for x in teams_cache.values()]) == False:
+    #midseason if any team has played and less than a week has gone by.
+    is_midseason = day_count < 7 and any([x.played_today() for x in teams_cache.values()])
+    #between seasons if no team has played after a few days.
+    is_between_seasons = day_count < 3 and all([x.played_today() for x in teams_cache.values()]) == False
+    #leave the loop if it's midseason or between seasons, but not both.
+    logical_xor = (is_midseason and not is_between_seasons) or (not is_midseason and is_between_seasons)
+    while logical_xor:
         d += relativedelta(days=-1)
+        day_count += 1
         print(d)
+        
         parse_gameday2_data(d, teams_cache)
+
+        is_midseason = day_count < 7 and any([x.played_today() for x in teams_cache.values()])
+        is_between_seasons = day_count < 3 and all([x.played_today() for x in teams_cache.values()]) == False
+        logical_xor = (is_midseason and not is_between_seasons) or (not is_midseason and is_between_seasons)
     #end while
 
     #sort teams by less than equivalence
