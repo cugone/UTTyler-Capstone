@@ -134,6 +134,9 @@ try:
     parse_gameday2_data(d, teams_cache)
     while is_midseason(teams_cache, day_count):
 
+        if all([x.played_today() for x in teams_cache.values()]):
+            break
+
         d += relativedelta(days=-1)
         day_count += 1
         print(d)
