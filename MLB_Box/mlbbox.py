@@ -60,47 +60,31 @@ def parse_gameday2_data(date, teams_cache):
         if home_divison != 'C' and away_divison != 'C':
             continue
         #end if
-        
+
         #Get name/wins/losses for each AL-Central team
-        home_league = league_value[1]
-        if home_league == 'A' and home_divison == 'C':
+        if home_divison == 'C':
             name = child.attrib['home_team_name']
             wins = int(child.attrib['home_win'])
             losses = int(child.attrib['home_loss'])
-            if teams_cache[name].played_today() == False:
-                #!!DEBUG CODE!!
-                print("Home: " + "Div: " + home_divison + " " + name + " W: " + str(wins) + " L: " + str(losses))
-                #!!DEBUG CODE!!
-                #print(name + " W: " + str(wins) + " L: " + str(losses))
-                teams_cache[name].set_played_today()
-                teams_cache[name].wins(wins)
-                teams_cache[name].losses(losses)
-            #end if
+
+            teams_cache[name].set_played_today()
+            teams_cache[name].wins(wins)
+            teams_cache[name].losses(losses)
         #end if
-        
-        away_league = league_value[0]
-        if away_league == 'A' and away_divison == 'C':
+
+        if away_divison == 'C':
             name = child.attrib['away_team_name']
             wins = int(child.attrib['away_win'])
             losses = int(child.attrib['away_loss'])
-            if teams_cache[name].played_today() == False:
-                print("Away: " + "Div: " + away_divison + " " + name + " W: " + str(wins) + " L: " + str(losses))
-                teams_cache[name].set_played_today()
-                teams_cache[name].wins(wins)
-                teams_cache[name].losses(losses)
-            #end if
+
+            teams_cache[name].set_played_today()
+            teams_cache[name].wins(wins)
+            teams_cache[name].losses(losses)
         #end if
     #end for
 
 #end parse_gameday2_data
 
-##
-# <summary>Raises the physical flags based on standings position.</summary>
-# <remarks>Casey Ugone, 3/3/2016.</remarks>
-# <param name="cache">The teams cache.</param>
-def raiseflags(cache):
-    pass
-#end raiseflags
 
 #Grab data from server.
 teams_cache = {"White Sox": Team(False, "Chicago", "White Sox", 0, 0), \
@@ -111,19 +95,16 @@ teams_cache = {"White Sox": Team(False, "Chicago", "White Sox", 0, 0), \
 
 try:
     d = datetime.date.today()
-    print(d)
     parse_gameday2_data(d, teams_cache)
-    while all([x.played_today() for x in teams_cache.values()]) == False:
+    day_count = 0
+    while day_count < 7 or all([x.played_today() for x in teams_cache.values()]) == False:
         d += relativedelta(days=-1)
-        print(d)
+        day_count += 1
         parse_gameday2_data(d, teams_cache)
     #end while
 
     #sort teams by less than equivalence
     sorted_teams = sorted([_ for _ in teams_cache.values()])
-    
-    #Flag/Servo Code Here from teams_cache
-    #raise_flags(teams_cache)    
     
     out_file = open("results.dat", "w")
     out_file.write(str(d) + '\n')
