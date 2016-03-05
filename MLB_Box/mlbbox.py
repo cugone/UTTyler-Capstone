@@ -115,7 +115,7 @@ def is_midseason(teams_cache, day_count):
 # <summary>Raises the physical flags based on standings position.</summary>
 # <remarks>Casey Ugone, 3/3/2016.</remarks>
 # <param name="cache">The list of teams sorted by highest to lowest standing.</param>
-def raiseflags(sorted_teams):
+def raise_flags(sorted_teams):
     pass
 #end raiseflags
 
