@@ -101,11 +101,12 @@ def parse_gameday2_data(date, teams_cache):
 # <param name="day_count">  Number of days travelled.</param>
 # <returns>A value.</returns>
 def is_midseason(teams_cache, day_count):
+
     #midseason if any team has played and less than a week has gone by.
-    is_midseason = day_count < 7 and any([x.played_today() for x in teams_cache.values()])
+    is_midseason = (day_count >= 0 and day_count < 7) and any([x.played_today() for x in teams_cache.values()])
 
     #between seasons if no team has played after a few days.
-    is_between_seasons = day_count < 3 and all([x.played_today() for x in teams_cache.values()]) == False
+    is_between_seasons = (day_count >= 3 and day_count < 7) and all([x.played_today() for x in teams_cache.values()]) == False
     
     #if it's midseason or between seasons, but not both.
     return (is_midseason and not is_between_seasons) or (not is_midseason and is_between_seasons)
