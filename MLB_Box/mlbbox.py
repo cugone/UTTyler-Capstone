@@ -151,10 +151,8 @@ try:
     #Flag/Servo Code Here from teams_cache
     raise_flags(sorted_teams)    
     
-    out_file = open("results.dat", "w")
-    out_file.write(str(d) + '\n')
-    out_file.write(str(sorted_teams))
-    out_file.close()
+    print(str(sorted_teams))
+
 except URLError as e:
     print("No data available. Check back later.")
     url = None
