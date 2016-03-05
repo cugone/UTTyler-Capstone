@@ -114,8 +114,8 @@ def is_midseason(teams_cache, day_count):
 ##
 # <summary>Raises the physical flags based on standings position.</summary>
 # <remarks>Casey Ugone, 3/3/2016.</remarks>
-# <param name="cache">The teams cache.</param>
-def raiseflags(cache):
+# <param name="cache">The list of teams sorted by highest to lowest standing.</param>
+def raiseflags(sorted_teams):
     pass
 #end raiseflags
 
@@ -145,7 +145,7 @@ try:
     sorted_teams = sorted([_ for _ in teams_cache.values()])
     
     #Flag/Servo Code Here from teams_cache
-    raise_flags(teams_cache)    
+    raise_flags(sorted_teams)    
     
     out_file = open("results.dat", "w")
     out_file.write(str(d) + '\n')
