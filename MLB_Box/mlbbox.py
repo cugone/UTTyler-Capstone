@@ -94,6 +94,13 @@ def parse_gameday2_data(date, teams_cache):
 
 #end parse_gameday2_data
 
+##
+# <summary>Raises the physical flags based on standings position.</summary>
+# <remarks>Casey Ugone, 3/3/2016.</remarks>
+# <param name="cache">The teams cache.</param>
+def raiseflags(cache):
+    pass
+#end raiseflags
 
 #Grab data from server.
 teams_cache = {"White Sox": Team(False, "Chicago", "White Sox", 0, 0), \
@@ -116,7 +123,7 @@ try:
     sorted_teams = sorted([_ for _ in teams_cache.values()])
     
     #Flag/Servo Code Here from teams_cache
-    #raise_flags(teams_cache)    
+    raise_flags(teams_cache)    
     
     out_file = open("results.dat", "w")
     out_file.write(str(d) + '\n')
