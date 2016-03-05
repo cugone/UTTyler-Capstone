@@ -68,10 +68,6 @@ def parse_gameday2_data(date, teams_cache):
             wins = int(child.attrib['home_win'])
             losses = int(child.attrib['home_loss'])
             if teams_cache[name].played_today() == False:
-                #!!DEBUG CODE!!
-                print("Home: " + "Div: " + home_divison + " " + name + " W: " + str(wins) + " L: " + str(losses))
-                #!!DEBUG CODE!!
-                #print(name + " W: " + str(wins) + " L: " + str(losses))
                 teams_cache[name].set_played_today()
                 teams_cache[name].wins(wins)
                 teams_cache[name].losses(losses)
@@ -128,9 +124,10 @@ teams_cache = {"White Sox": Team(False, "Chicago", "White Sox", 0, 0), \
                "Twins": Team(False, "Minnesota", "Twins", 0, 0)}
 
 try:
+
     d = datetime.date.today()
     day_count = 0
-    print(d)
+
     parse_gameday2_data(d, teams_cache)
     while is_midseason(teams_cache, day_count):
 
@@ -139,7 +136,6 @@ try:
 
         d += relativedelta(days=-1)
         day_count += 1
-        print(d)
         
         parse_gameday2_data(d, teams_cache)
 
