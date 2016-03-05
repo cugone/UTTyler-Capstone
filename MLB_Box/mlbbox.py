@@ -144,10 +144,10 @@ try:
     #sort teams by less than equivalence
     sorted_teams = sorted([_ for _ in teams_cache.values()])
     
+    print(str(sorted_teams))
+
     #Flag/Servo Code Here from teams_cache
     raise_flags(sorted_teams)    
-    
-    print(str(sorted_teams))
 
 except URLError as e:
     print("No data available. Check back later.")
