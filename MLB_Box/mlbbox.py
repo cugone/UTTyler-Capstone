@@ -116,14 +116,7 @@ def raise_flags(sorted_teams):
     pass
 #end raiseflags
 
-#Grab data from server.
-teams_cache = {"White Sox": Team(False, "Chicago", "White Sox", 0, 0), \
-               "Indians": Team(False, "Cleveland", "Indians", 0, 0), \
-               "Tigers": Team(False, "Detroit", "Tigers", 0, 0), \
-               "Royals": Team(False, "Kansas City", "Royals", 0, 0), \
-               "Twins": Team(False, "Minnesota", "Twins", 0, 0)}
-
-try:
+def calculate_standings(d, teams_cache):
 
     d = datetime.date.today()
     day_count = 0
@@ -141,13 +134,26 @@ try:
 
     #end while
 
+#end calculate_standings
+
+#Grab data from server.
+teams_cache = {"White Sox": Team(False, "Chicago", "White Sox", 0, 0), \
+               "Indians": Team(False, "Cleveland", "Indians", 0, 0), \
+               "Tigers": Team(False, "Detroit", "Tigers", 0, 0), \
+               "Royals": Team(False, "Kansas City", "Royals", 0, 0), \
+               "Twins": Team(False, "Minnesota", "Twins", 0, 0)}
+
+try:
+
+    calculate_standings(teams_cache)
+
     #sort teams by less than equivalence
     sorted_teams = sorted([_ for _ in teams_cache.values()])
     
     print(str(sorted_teams))
 
     #Flag/Servo Code Here from teams_cache
-    raise_flags(sorted_teams)    
+    raise_flags(sorted_teams)
 
 except URLError as e:
     print("No data available. Check back later.")
