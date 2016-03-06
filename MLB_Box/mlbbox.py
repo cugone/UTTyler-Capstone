@@ -116,7 +116,7 @@ def raise_flags(sorted_teams):
     pass
 #end raiseflags
 
-def calculate_standings(d, teams_cache):
+def calculate_standings(teams_cache):
 
     d = datetime.date.today()
     day_count = 0
