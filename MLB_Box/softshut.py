@@ -11,9 +11,11 @@ def loop():
 
 #Define a function to run when an interrupt is called
 def shutdown(pin):
-    call('sudo shutdown -h now', shell=False)
+    print("Calling shutdown -h now")
+    call(['sudo', 'shutdown', '-h', 'now'])
 #end shutdown
 
+print("!!!SETTING UP GPIO...")
 #Set pin numbering to board numbering
 gpio.setmode(gpio.BOARD)
 #Set pin 7 as input
@@ -21,5 +23,6 @@ gpio.setup(7, gpio.IN)
 #Set up an interrupt to look for button presses.
 gpio.add_event_detect(7, gpio.RISING, callback=shutdown, bouncetime=200)
 
+print("Waiting for input...")
 #Run the loop function to keep script running.
 loop()
