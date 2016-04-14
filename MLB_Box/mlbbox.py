@@ -9,6 +9,8 @@ from dateutil.parser import *
 from operator import itemgetter, attrgetter
 from urllib.request import urlopen
 from urllib.error import *
+from subprocess import call
+from Adafruit_PWM_Servo_Driver.Adafruit_PWM_Servo_Driver import PWM
 
 from Team import Team
 
@@ -113,7 +115,7 @@ def is_midseason(teams_cache, day_count):
 # <remarks>Casey Ugone, 3/3/2016.</remarks>
 # <param name="team_obj">A valid Team object.</param>
 def raise_flags(team_obj):
-    pass
+    call(['python', 'servo_test.py'])
 #end raiseflags
 
 def calculate_standings(teams_cache):
@@ -149,13 +151,10 @@ try:
 
     #sort teams by less than equivalence
     sorted_teams = sorted([_ for _ in teams_cache.values()])
-    
-    print(str(sorted_teams))
 
     #Flag/Servo Code Here from teams_cache
     raise_flags(sorted_teams)
 
 except URLError as e:
-    print("No data available. Check back later.")
     url = None
 #end try
