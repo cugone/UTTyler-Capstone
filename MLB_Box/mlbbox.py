@@ -115,9 +115,18 @@ def is_midseason(teams_cache, day_count):
 def raise_flags(team_obj):
     print("In raise_flags")
     print(team_obj)
+    s = ""
+    for i in range(len(team_obj)):
+        s = s + ' ' + team_obj[0].name()
+    #end for
     call(['python', \
           '/home/pi/PiSupply/Adafruit-Raspberry-Pi-Python-Code/Adafruit_PWM_Servo_Driver/Servo_Example.py', \
-          str(team_obj)])
+          team_obj[0].name(), \
+          team_obj[1].name(), \
+          team_obj[2].name(), \
+          team_obj[3].name(), \
+          team_obj[4].name() \
+          ])
 #end raiseflags
 
 def calculate_standings(teams_cache):
