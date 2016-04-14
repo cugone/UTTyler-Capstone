@@ -10,7 +10,6 @@ from operator import itemgetter, attrgetter
 from urllib.request import urlopen
 from urllib.error import *
 from subprocess import call
-from Adafruit_PWM_Servo_Driver.Adafruit_PWM_Servo_Driver import PWM
 
 from Team import Team
 
@@ -82,7 +81,6 @@ def parse_gameday2_data(date, teams_cache):
             wins = int(child.attrib['away_win'])
             losses = int(child.attrib['away_loss'])
             if teams_cache[name].played_today() == False:
-                print("Away: " + "Div: " + away_divison + " " + name + " W: " + str(wins) + " L: " + str(losses))
                 teams_cache[name].set_played_today()
                 teams_cache[name].wins(wins)
                 teams_cache[name].losses(losses)
@@ -115,7 +113,11 @@ def is_midseason(teams_cache, day_count):
 # <remarks>Casey Ugone, 3/3/2016.</remarks>
 # <param name="team_obj">A valid Team object.</param>
 def raise_flags(team_obj):
-    call(['python', 'servo_test.py'])
+    print("In raise_flags")
+    print(team_obj)
+    call(['python', \
+          '/home/pi/PiSupply/Adafruit-Raspberry-Pi-Python-Code/Adafruit_PWM_Servo_Driver/Servo_Example.py', \
+          str(team_obj)])
 #end raiseflags
 
 def calculate_standings(teams_cache):
