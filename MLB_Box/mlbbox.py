@@ -113,7 +113,7 @@ def is_midseason(teams_cache, day_count):
 # <remarks>Casey Ugone, 3/3/2016.</remarks>
 # <param name="team_obj">A valid Team object.</param>
 def raise_flags(team_obj):
-    call(['python', \
+    call(['python2.7', \
           '/home/pi/PiSupply/Adafruit-Raspberry-Pi-Python-Code/Adafruit_PWM_Servo_Driver/Servo_Example.py', \
           team_obj[0].name(), \
           team_obj[1].name(), \
