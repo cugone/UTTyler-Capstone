@@ -1,0 +1,58 @@
+#!/usr/bin/python
+
+import sys
+from Adafruit_PWM_Servo_Driver import PWM
+import time
+
+# ===========================================================================
+# Example Code
+# ===========================================================================
+
+# Initialise the PWM device using the default address
+pwm = PWM(0x40)
+# Note if you'd like more debug output you can instead run:
+#pwm = PWM(0x40, debug=True)
+
+servoMin = 150  # Min pulse length out of 4096
+servoMax = 600  # Max pulse length out of 4096
+
+#def setServoPulse(channel, pulse):
+#    pulseLength = 1000000                   # 1,000,000 us per second
+#    pulseLength /= 15                       # 60 Hz
+#    print "%d us per period" % pulseLength
+#    pulseLength /= 4096                     # 12 bits of resolution
+#    print "%d us per bit" % pulseLength
+#    pulse *= 1000
+#    pulse /= pulseLength
+#    pwm.setPWM(channel, 0, pulse)
+#end setServoPulse
+
+servo_map = { "Indians":0, "Royals":1, "Tigers":2, "Twins":3,  "White Sox": 4 }
+
+teams = [sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]]
+
+#Set frquency to 60 Hz
+pwm.setPWMFreq(60)
+
+positions = {0: 225, 1: 375, 2: 500, 3: 625, 4: 750 }
+
+#Reset all flags to position 0
+pwm.setAllPWM(0, positions[0])
+time.sleep(1)
+
+#Set positions of each flag
+#1st place to highest position
+pwm.setPWM(servo_map[teams[0]], 0, positions[4])
+#time.sleep(1)
+#pwm.setPWM(servo_map[teams[1]], 0, positions[3])
+#time.sleep(1)
+#pwm.setPWM(servo_map[teams[2]], 0, positions[2])
+#time.sleep(1)
+#pwm.setPWM(servo_map[teams[3]], 0, positions[1])
+#time.sleep(1)
+#5th place to lowest position
+#pwm.setPWM(servo_map[teams[4]], 0, positions[0])
+time.sleep(1)
+pwm.setAllPWM(0, 0)
+
+
