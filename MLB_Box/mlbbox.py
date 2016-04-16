@@ -111,7 +111,7 @@ def is_midseason(teams_cache, day_count):
 ##
 # <summary>Raises the physical flags based on standings position.</summary>
 # <remarks>Casey Ugone, 3/3/2016.</remarks>
-# <param name="team_obj">A valid Team object.</param>
+# <param name="team_obj">A sorted, indexable object containing 5 Teams.</param>
 def raise_flags(team_obj):
     call(['python2.7', \
           '/home/pi/PiSupply/Adafruit-Raspberry-Pi-Python-Code/Adafruit_PWM_Servo_Driver/Servo_Example.py', \
@@ -143,7 +143,7 @@ def calculate_standings(teams_cache):
 
 #end calculate_standings
 
-#Grab data from server.
+#Initial cache for teams
 teams_cache = {"White Sox": Team(False, "Chicago", "White Sox", 0, 0), \
                "Indians": Team(False, "Cleveland", "Indians", 0, 0), \
                "Tigers": Team(False, "Detroit", "Tigers", 0, 0), \
@@ -157,7 +157,6 @@ try:
     #sort teams by less than equivalence
     sorted_teams = sorted([_ for _ in teams_cache.values()])
 
-    #Flag/Servo Code Here from teams_cache
     raise_flags(sorted_teams)
 
 except URLError as e:
