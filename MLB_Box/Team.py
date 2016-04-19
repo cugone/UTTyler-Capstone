@@ -30,10 +30,8 @@ class Team:
     # <param name="other">Another instance to compare.</param>
     # <returns>A value.</returns>
     def __lt__(self, other):
-        my_games_total = self.wins + self.losses
-        your_games_total = other.wins + other.losses
-        my_avg = self.wins / my_games_total
-        your_avg = other.wins / your_games_total
+        my_avg = self._wins / (self._wins + self._losses)
+        your_avg = other._wins / (other._wins + other._losses)
         return my_avg < your_avg
 #        if self._wins == other._wins:
 #            if self._losses == other._losses:
@@ -41,7 +39,7 @@ class Team:
 #            #end if
 #            return self._losses < other._losses
         #end if
-        return self._wins > other._wins
+#        return self._wins < other._wins
     #end __lt__
     
     def city(self, city = None):
