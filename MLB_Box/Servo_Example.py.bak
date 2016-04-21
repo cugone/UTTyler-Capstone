@@ -36,23 +36,28 @@ pwm.setPWMFreq(60)
 
 positions = {0: 225, 1: 375, 2: 500, 3: 625, 4: 750 }
 
-#Reset all flags to position 0
+#Reset all flags to position lowest position
 pwm.setAllPWM(0, positions[0])
 time.sleep(1)
 
 #Set positions of each flag
-#1st place to highest position
+#1st place
 pwm.setPWM(servo_map[teams[0]], 0, positions[4])
-#time.sleep(1)
-#pwm.setPWM(servo_map[teams[1]], 0, positions[3])
-#time.sleep(1)
-#pwm.setPWM(servo_map[teams[2]], 0, positions[2])
-#time.sleep(1)
-#pwm.setPWM(servo_map[teams[3]], 0, positions[1])
-#time.sleep(1)
-#5th place to lowest position
-#pwm.setPWM(servo_map[teams[4]], 0, positions[0])
 time.sleep(1)
+#2nd place
+pwm.setPWM(servo_map[teams[1]], 0, positions[3])
+time.sleep(1)
+#3rd place
+pwm.setPWM(servo_map[teams[2]], 0, positions[2])
+time.sleep(1)
+#4th place
+pwm.setPWM(servo_map[teams[3]], 0, positions[1])
+time.sleep(1)
+#5th place to lowest position (shouldn't move)
+pwm.setPWM(servo_map[teams[4]], 0, positions[0])
+time.sleep(1)
+
+#turn off all servos
 pwm.setAllPWM(0, 0)
 
 
