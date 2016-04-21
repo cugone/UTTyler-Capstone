@@ -113,8 +113,6 @@ def is_midseason(teams_cache, day_count):
 # <remarks>Casey Ugone, 3/3/2016.</remarks>
 # <param name="team_obj">A sorted, indexable object containing 5 Teams.</param>
 def raise_flags(team_obj):
-    print(team_obj)
-    print("Calling servo controller module via call function...")
     call(['python2.7', \
           '/home/pi/PiSupply/Adafruit-Raspberry-Pi-Python-Code/Adafruit_PWM_Servo_Driver/Servo_Example.py', \
           team_obj[0].name(), \
@@ -123,7 +121,6 @@ def raise_flags(team_obj):
           team_obj[3].name(), \
           team_obj[4].name() \
           ])
-    print("Returned from servo controller.")
 #end raiseflags
 
 def calculate_standings(teams_cache):
@@ -158,10 +155,9 @@ try:
     calculate_standings(teams_cache)
 
     #sort teams by less than equivalence
-    sorted_teams = sorted([_ for _ in teams_cache.values()])
+    sorted_teams = sorted([_ for _ in teams_cache.values()], key=None, reverse=True)
 
     raise_flags(sorted_teams)
-    print("Done.")
 except URLError as e:
     url = None
 #end try
