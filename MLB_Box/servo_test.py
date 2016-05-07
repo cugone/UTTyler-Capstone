@@ -1,3 +1,7 @@
+#Copyright (C) 2016 Casey Ugone
+#Full description of licensing rights available in LICENSE.txt file provided with this distribution.
+#If a LICENSE.txt file was not provided with this distribution, it is in violation of the GPLv3
+
 import RPi.GPIO as GPIO
 import time
 import math
